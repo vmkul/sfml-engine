@@ -12,6 +12,6 @@ add_executable(
         src/EventManager.h
         src/GUI.cpp
         src/GUI.h
-)
+        src/GameBoard.cpp src/GameBoard.h)
 
 target_link_libraries(sfml_engine sfml-graphics sfml-window sfml-system)
