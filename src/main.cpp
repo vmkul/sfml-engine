@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "EventManager.h"
 #include "GUI.h"
+#include "GameBoard.h"
 
 int main()
 {
@@ -15,9 +16,8 @@ int main()
     };
     EventManager eventManager;
 
-    for (auto &b : menuButtons) {
-        eventManager.registerEntity(b);
-    }
+    GameBoard gb(window, {3, 3});
+    eventManager.registerEntity(gb);
 
     while (window.isOpen()) {
         sf::Event event{};
