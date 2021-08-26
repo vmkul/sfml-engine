@@ -9,6 +9,8 @@
 
 bool isPointInPolygon(sf::Vector2<float> point, const sf::RectangleShape &shape);
 
+bool isPointInPolygon(sf::Vector2<float> point, const sf::CircleShape &shape);
+
 class DrawableEntity {
 public:
     virtual void draw() = 0;

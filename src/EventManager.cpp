@@ -17,6 +17,21 @@ bool isPointInPolygon(sf::Vector2<float> point, const sf::RectangleShape &shape)
     return false;
 }
 
+bool isPointInPolygon(sf::Vector2<float> point, const sf::CircleShape &shape)
+{
+    const float x1 = shape.getPosition().x;
+    const float y1 = shape.getPosition().y;
+    const float diameter = 2 * shape.getRadius();
+
+    const float x2 = diameter + x1;
+    const float y2 = diameter + y1;
+
+    if (point.x >= x1 && point.x <= x2 && point.y >= y1 && point.y <= y2)
+        return true;
+
+    return false;
+}
+
 void EventManager::registerEntity(DrawableEntity &entity)
 {
     entities.push_back(&entity);
