@@ -14,23 +14,22 @@ int main()
             MenuButton{window, {500, 300}, "Button3"},
             MenuButton{window, {500, 400}, "Button4"},
     };
-    EventManager eventManager;
+    auto eventManager = new EventManager();
 
-    GameBoard gb(window, {3, 3});
-    eventManager.registerEntity(gb);
+    GameBoard gb(window, {3, 3}, eventManager);
 
     while (window.isOpen()) {
         sf::Event event{};
 
         while (window.pollEvent(event)) {
-            eventManager.reportEvent(event);
+            eventManager->reportEvent(event);
 
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
         window.clear();
-        eventManager.drawEntities();
+        gb.draw();
         window.display();
     }
 
