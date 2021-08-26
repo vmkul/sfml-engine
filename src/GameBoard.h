@@ -5,7 +5,16 @@
 #include <vector>
 #include "EventManager.h"
 
+enum Direction {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT,
+};
+
 unsigned int calculateCenterPadding(unsigned int areaWidth, int numElements, int elementWidth, int elementPadding);
+
+class GameBoard;
 
 class SymbolSquare : public DrawableEntity {
 public:
@@ -24,35 +33,59 @@ private:
     sf::RectangleShape shape;
 };
 
+class PathVertex : public DrawableEntity {
+public:
+    explicit PathVertex(sf::RenderWindow &w, sf::Vector2f pos, GameBoard *gb) : shape(15.), window(w), gameBoard(gb)
+    {
+        shape.setFillColor(sf::Color::Red);
+        shape.setPosition(pos.x, pos.y);
+    }
+
+    void draw() override;
+
+    void onMouseUp() override;
+
+    bool isPointInside(sf::Vector2f point) override;
+
+    void connect(enum Direction direction);
+
+    bool isConnected();
+
+private:
+    bool connected = false;
+    GameBoard *gameBoard;
+    sf::RenderWindow &window;
+    sf::CircleShape shape;
+    sf::RectangleShape connectionLine;
+};
+
 class GameBoard : public DrawableEntity {
 public:
-    GameBoard(sf::RenderWindow &w, sf::Vector2i dims) : boardDims(dims), window(w)
+    GameBoard(sf::RenderWindow &w, sf::Vector2i dims, EventManager *em) : boardDims(dims), window(w), eventManager(em)
     {
-        auto windowSize = window.getSize();
-        unsigned int leftPadding = calculateCenterPadding(windowSize.x, dims.y, 100, 50);
-        unsigned int topPadding = calculateCenterPadding(windowSize.y, dims.x, 100, 50);
-
-        for (int i = 0; i < dims.x; i++) {
-            std::vector<SymbolSquare *> row;
-
-            for (int j = 0; j < dims.y; j++) {
-                auto s = new SymbolSquare(w, {static_cast<float>((j * 150) + leftPadding),
-                                              static_cast<float>((i * 150) + topPadding)});
-                row.push_back(s);
-            }
-
-            boardSquares.push_back(row);
-        }
+        initSquares();
+        initVertices();
     }
+
+    void initSquares();
+
+    void initVertices();
 
     void draw() override;
 
     bool isPointInside(sf::Vector2f point) override;
 
+    sf::Vector2i getVertexCoordinates(PathVertex *vertex);
+
+    void handleVertexClick(PathVertex *vertex);
+
 private:
+    EventManager *eventManager;
     sf::RenderWindow &window;
     std::vector<std::vector<SymbolSquare *>> boardSquares;
+    std::vector<std::vector<PathVertex *>> pathVertices;
     sf::Vector2i boardDims;
+    sf::Vector2i headVertex = {0, 0};
 };
 
 #endif //SFML_ENGINE_GAMEBOARD_H
