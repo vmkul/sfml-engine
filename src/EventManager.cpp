@@ -53,7 +53,7 @@ void EventManager::handleMouseDown(const sf::Event &event)
 
 void EventManager::handleMouseMoved(const sf::Event &event)
 {
-    for (auto &entity : entities) {
+    for (auto &entity: entities) {
         if (entity->isPointInside({static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y)})) {
             if (lastHoveredEntity && lastHoveredEntity != entity) {
                 lastHoveredEntity->onMouseLeave();
@@ -72,7 +72,7 @@ void EventManager::handleMouseMoved(const sf::Event &event)
 
 void EventManager::drawEntities()
 {
-    for (auto &entity : entities) {
+    for (auto &entity: entities) {
         entity->draw();
     }
 }
